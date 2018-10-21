@@ -12,11 +12,22 @@ public class Placement : MonoBehaviour {
 
 		float[,] impactMap = calcImpacts (data, radius, decay, width, height);
 
+		//Debug.Log (impactMap);
+		for (int i = 0; i < impactMap.GetLength (0); i++) {
+			string line = "";
+			for (int x = 0; x < impactMap.GetLength (1); x++) {
+				line += (impactMap [i, x] + " ");
+			}
+			Debug.Log (line);
+
+		}
+
 		Vector2[][] solSets = partitionPlace (impactMap, num);
 
 		Vector2[] bestSet = solSets [0];
 		float bestImpact = evaluate(data, solSets[0], radius, decay);
 		float currImpact;
+
 		for (int i = 1; i < solSets.Length; i++) {
 			currImpact = evaluate (data, solSets [i], radius, decay);
 			if (currImpact > bestImpact)
@@ -28,7 +39,9 @@ public class Placement : MonoBehaviour {
 
 		}
 
+
 		bestValue = bestImpact;
+		Debug.Log (bestSet[0] + " " + impactMap[(int)bestSet[0].x, (int)bestSet[0].y]);
 		return bestSet;
 	}
 
@@ -40,24 +53,24 @@ public class Placement : MonoBehaviour {
 			for (int y = (int)(radius + .5f); y >= 0; y--) {
 				int x = 0;
 				float distance = withinCircle (radius, data [d], new Vector2 (data [d].x + x, data [d].y + y));
-				while (distance >=0) 
+				while (distance >= 0) 
 				{
 
 					if (inMap(width, height, new Vector2(data[d].x + x, data[d].y + y)))
 					{
-						impactMap[(int)(data[d].x + x), (int)(data[d].y + y)] += data[d].z / Mathf.Pow(distance, 2) * decay;
+						impactMap [(int)(data [d].x + x), (int)(data [d].y + y)] += data [d].z;// / Mathf.Pow(distance, 2) * decay;
 					}
 					if (x != 0 && inMap(width, height, new Vector2(data[d].x - x, data[d].y + y)))
 					{
-						impactMap[(int)(data[d].x - x), (int)(data[d].y + y)] += data[d].z / Mathf.Pow(distance, 2) * decay;
+						impactMap [(int)(data [d].x - x), (int)(data [d].y + y)] += data [d].z;// / Mathf.Pow(distance, 2) * decay;
 					}
 					if (y != 0 && inMap(width, height, new Vector2(data[d].x + x, data[d].y - y)))
 					{
-						impactMap[(int)(data[d].x + x), (int)(data[d].y - y)] += data[d].z / Mathf.Pow(distance, 2) * decay;
+						impactMap[(int)(data[d].x + x), (int)(data[d].y - y)] += data[d].z;// / Mathf.Pow(distance, 2) * decay;
 					}
 					if (x != 0 && y != 0 && inMap(width, height, new Vector2(data[d].x - x, data[d].y - y)))
 					{
-						impactMap[(int)(data[d].x - x), (int)(data[d].y - y)] += data[d].z / Mathf.Pow(distance, 2) * decay;
+						impactMap[(int)(data[d].x - x), (int)(data[d].y - y)] += data[d].z;// / Mathf.Pow(distance, 2) * decay;
 					}
 					x++;
 					distance = withinCircle(radius, data[d], new Vector2(data[d].x + x, data[d].y + y));
@@ -144,7 +157,7 @@ public class Placement : MonoBehaviour {
 				int index=(int)(num*x/impactMap.GetLength(0));
 				if (impactMap [x, y] > currMax [index]) {
 					currMax [index] = impactMap [x, y];
-					solutions [index] = new Vector2 (x, y);
+					solutions [index] = new Vector2 (x,y);
 				}
 			}
 		}
@@ -235,7 +248,7 @@ public class Placement : MonoBehaviour {
 
 				int index=(int)(theta * num / Mathf.PI / 2);
 
-				Debug.Log(theta);
+				//Debug.Log(theta);
 
 				if (impactMap [x, y] > currMax [index]) {
 					currMax [index] = impactMap [x, y];
@@ -251,7 +264,7 @@ public class Placement : MonoBehaviour {
 	{
 		float total = 0;
 		for (int j = 0; j < data.Length; j++) {
-			float max = 0;
+			float max = radius;
 			int currMax = -1;
 			for (int k = 0; k < wells.Length; k++) {
 				float distance = withinCircle(radius,data[j],wells[k]);
@@ -263,7 +276,8 @@ public class Placement : MonoBehaviour {
 			}
 			if(currMax!=-1)
 			{
-				total += data[currMax].z / Mathf.Pow(max, 2) * decay;
+				//total += data[j].z / Mathf.Pow(max, 2) * decay;
+				total+=data[j].z;
 			}
 		}
 		return total;

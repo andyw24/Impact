@@ -63,7 +63,7 @@ public class ImpactCreator : MonoBehaviour {
 		{
 			for (int x = 0; x < matrix.GetLength(1); x++)
 			{
-				returnArray[index] = new Vector3(y, x, matrix[y, x]);
+				returnArray[index] = new Vector3(x, y, matrix[y, x]);
 				index++;
 			}
 		}

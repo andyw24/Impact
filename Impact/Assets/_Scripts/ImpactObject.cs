@@ -24,7 +24,7 @@ public class ImpactObject : MonoBehaviour {
 		int gridWidth = gridController.GetComponent<GridGenerator>().width;
 		int gridHeight = gridController.GetComponent<GridGenerator>().height;
 
-		if (gridWidth >= gridHeight)
+		if (gridWidth > gridHeight)
 		{
 			cellSize = gridImage.GetComponent<RectTransform>().rect.width / gridWidth;
 			offset = (gridImage.GetComponent<RectTransform>().rect.width / gridWidth) / 2;
@@ -34,7 +34,7 @@ public class ImpactObject : MonoBehaviour {
 			cellSize = gridImage.GetComponent<RectTransform>().rect.height / gridHeight;
 			offset = (gridImage.GetComponent<RectTransform>().rect.height / gridHeight) / 2;
 		}
-		this.transform.localPosition = new Vector2((x * cellSize) + offset, (y * cellSize) + offset);
+		this.transform.localPosition = new Vector2((x * cellSize) + offset, ((gridHeight - y -1) * cellSize) + offset);
 
 		calculateRadius();
 		this.transform.localScale = new Vector3(radiusScale, radiusScale, 1f);
