@@ -15,10 +15,10 @@ public class Placement : MonoBehaviour {
 		Vector2[][] solSets = partitionPlace (impactMap, num);
 
 		Vector2[] bestSet = solSets [0];
-		float bestImpact = evaluate(data, solSets[0], radius);
+		float bestImpact = evaluate(data, solSets[0], radius, decay);
 		float currImpact;
 		for (int i = 1; i < solSets.Length; i++) {
-			currImpact = evaluate (data, solSets [i], radius);
+			currImpact = evaluate (data, solSets [i], radius, decay);
 			if (currImpact > bestImpact)
 			{
 				bestImpact = currImpact;
@@ -44,19 +44,19 @@ public class Placement : MonoBehaviour {
 				{
 					
 					if (inMap (width, height, new Vector2(data[d].x+x, data[d].y+y))) {
-						impactMap [(int)(data [d].x + x), (int)(data [d].y + y)] += data [d].z;
+						impactMap [(int)(data [d].x + x), (int)(data [d].y + y)] += data [d].z/Mathf.Pow(distance, 2)*decay;
 					}
 					if(x!=0&&inMap(width, height, new Vector2(data[d].x-x, data[d].y+y)))
 					{
-						impactMap [(int)(data [d].x - x), (int)(data [d].y + y)] += data [d].z;
+						impactMap [(int)(data [d].x - x), (int)(data [d].y + y)] += data [d].z/Mathf.Pow(distance, 2)*decay;
 					}
 					if(y!=0&&inMap(width, height, new Vector2(data[d].x+x, data[d].y-y)))
 					{
-						impactMap [(int)(data [d].x + x), (int)(data [d].y - y)] += data [d].z;
+						impactMap [(int)(data [d].x + x), (int)(data [d].y - y)] += data [d].z/Mathf.Pow(distance, 2)*decay;
 					}
 					if(x!=0&&y!=0&&inMap(width, height, new Vector2(data[d].x-x, data[d].y-y)))
 					{
-						impactMap [(int)(data [d].x - x), (int)(data [d].y - y)] += data [d].z;
+						impactMap [(int)(data [d].x - x), (int)(data [d].y - y)] += data [d].z/Mathf.Pow(distance, 2)*decay;
 					}
 					x++;
 
@@ -239,7 +239,7 @@ public class Placement : MonoBehaviour {
 		return solutions;
 	}
 
-	public float evaluate(Vector3[] data, Vector2[] wells, float radius)
+	public float evaluate(Vector3[] data, Vector2[] wells, float radius, float decay)
 	{
 		float total = 0;
 		for (int j = 0; j < data.Length; j++) {
@@ -247,7 +247,7 @@ public class Placement : MonoBehaviour {
 			for (int k = 0; k < wells.Length; k++) {
 				float distance = withinCircle(radius,data[j],wells[k]);
 				if (distance != -1) {
-					total += data [j].z;
+					total += data [j].z/Mathf.Pow(distance, 2)*decay;
 				}
 			}
 		}

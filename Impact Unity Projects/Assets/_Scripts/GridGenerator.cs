@@ -21,6 +21,7 @@ public class GridGenerator : MonoBehaviour
 {
 	public int width; // width of the grid
 	public int height; // height of the grid
+	public int type;
 	public float max; // max or min population in a cell for color generation
 	public TextAsset gridInfo; // gridInfo.txt file
 	public GameObject gridImage; // image gameobject that holds the grid
@@ -75,6 +76,7 @@ public class GridGenerator : MonoBehaviour
 		//reading the first line for width and height and max
 		string wString = "";
 		string hString = "";
+		string typeString = "";
 		string whLine = sr.ReadLine();
 		int c = 0;
 		while (!whLine.Substring(c, 1).Equals(" "))
@@ -83,34 +85,62 @@ public class GridGenerator : MonoBehaviour
 			c++;
 		}
 		c++;
-		while (c < whLine.Length)
+		while (!whLine.Substring(c, 1).Equals(" "))
 		{
 			hString += whLine.Substring(c, 1);
+			c++;
+		}
+		c++;
+		while (c < whLine.Length)
+		{
+			typeString += whLine.Substring(c, 1);
 			c++;
 		}
 		//reading the rest of the file and putting everything into the int[,]
 		width = int.Parse(wString);
 		height = int.Parse(hString);
-		max = 0;
-		int[,] gridArray = new int[width, height];
-		try
-		{
-			for (int y = 0; y < height; y++)
-			{
-				string[] row = sr.ReadLine().Split(' ');
-				for (int x = 0; x < width; x++)
+		type = int.Parse (typeString);
+
+		float[,] gridArray = new float[width, height];
+		if (type == 0) {
+			max = 0;
+
+			try {
+				for (int y = 0; y < height; y++) {
+					string[] row = sr.ReadLine ().Split (' ');
+					for (int x = 0; x < width; x++) {
+						float cellValue = float.Parse (row [x]);
+						gridArray [x, y] = cellValue;
+						if (Mathf.Abs (cellValue) > max) {
+							max = cellValue;
+						}
+					}
+				}
+			} catch (FileNotFoundException) {
+			} catch (IOException) {
+			}
+		} else {
+			max = 0;
+			try {
+				
+				string line;
+				while ((line = sr.ReadLine()) != null)
 				{
-					int cellValue = int.Parse(row[x]);
-					gridArray[x, y] = cellValue;
+
+					string[] fields = line.Split(" ");
+					float cellValue = float.Parse(fields[2]);
 					if (Mathf.Abs(cellValue) > max)
 					{
 						max = cellValue;
 					}
+					gridArray(int.Parse(fields[0]), int.Parse(fields[1])) = cellValue;
 				}
+
+			} catch (FileNotFoundException) {
+			} catch (IOException) {
 			}
+
 		}
-		catch (FileNotFoundException) { }
-		catch (IOException) { }
 		gridInfoArray = gridArray;
 	}
 
