@@ -53,8 +53,8 @@ public class ImpactCreator : MonoBehaviour {
 		for (int i = 0; i < impactArray.Length; i++)
 		{
 			GameObject impactPrefab = Instantiate(impactObjects, impactArray[i], Quaternion.identity, gameObject.transform);
-			impactPrefab.GetComponent<ImpactObject>().x = (int)impactArray[i].x;
-			impactPrefab.GetComponent<ImpactObject>().y = (int)impactArray[i].y;
+			impactPrefab.GetComponent<ImpactObject>().x = (int)impactArray[i].y;
+			impactPrefab.GetComponent<ImpactObject>().y = (int)impactArray[i].x;
 			impactPrefab.GetComponent<ImpactObject>().radius = impactRadius;
 
 		}
