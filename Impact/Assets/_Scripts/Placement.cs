@@ -235,7 +235,6 @@ public class Placement : MonoBehaviour {
 
 				int index=(int)(theta * num / Mathf.PI / 2);
 
-				Debug.Log(theta);
 
 				if (impactMap [x, y] > currMax [index]) {
 					currMax [index] = impactMap [x, y];

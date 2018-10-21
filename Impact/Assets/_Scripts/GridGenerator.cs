@@ -32,7 +32,7 @@ public class GridGenerator : MonoBehaviour
 	public float[,] gridInfoArray; // gridArray that was read from file
 	Texture2D grid; // texture 2D that we are creating
 
-	void Start()
+	void Awake()
 	{
 		fileName = "Assets/gridInfo.txt";
 		//MakeGridInfo(fileName);
@@ -168,7 +168,7 @@ public class GridGenerator : MonoBehaviour
 		{
 			StreamWriter sw = new StreamWriter(fileName);
 
-			sw.WriteLine(width + " " + height + "0"); //first line in file is width and height
+			sw.WriteLine(width + " " + height + " 0"); //first line in file is width and height
 
 			for (int i = 0; i < height; i++)
 			{

@@ -21,19 +21,20 @@ public class ImpactObject : MonoBehaviour {
 		gridController = GameObject.Find("BackgroundGrid");
 		gridImage = GameObject.Find("Grid");
 
-		int gridWidth = gridController.GetComponent<GridGenerator>().width;
-		int gridHeight = gridController.GetComponent<GridGenerator>().height;
+		float gridWidth = gridController.GetComponent<GridGenerator>().width;
+		float gridHeight = gridController.GetComponent<GridGenerator>().height;
 
-		if (gridWidth >= gridHeight)
+		if (gridWidth > gridHeight)
 		{
-			cellSize = gridImage.GetComponent<RectTransform>().rect.width / gridWidth;
-			offset = (gridImage.GetComponent<RectTransform>().rect.width / gridWidth) / 2;
+			cellSize = (float)(gridImage.GetComponent<RectTransform>().rect.width) / gridWidth;
 		}
 		else
 		{
-			cellSize = gridImage.GetComponent<RectTransform>().rect.height / gridHeight;
-			offset = (gridImage.GetComponent<RectTransform>().rect.height / gridHeight) / 2;
+			cellSize = (float)(gridImage.GetComponent<RectTransform>().rect.height) / gridHeight;
 		}
+		offset = cellSize / 2;
+
+		Debug.Log(cellSize);
 		this.transform.localPosition = new Vector2((x * cellSize) + offset, (y * cellSize) + offset);
 
 		calculateRadius();
@@ -57,7 +58,7 @@ public class ImpactObject : MonoBehaviour {
 	// used to convert input radius to radiusScale
 	void calculateRadius()
 	{
-		radiusScale = radius * cellSize * 2; // 100 is used for scaling to the pixel size
+		radiusScale = radius * cellSize * 2f; // 100 is used for scaling to the pixel size
 
 	}
 

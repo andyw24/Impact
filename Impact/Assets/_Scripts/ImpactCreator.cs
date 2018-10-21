@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ImpactCreator : MonoBehaviour {
 
@@ -16,16 +17,20 @@ public class ImpactCreator : MonoBehaviour {
 
 	public float solutionRating; // score the algorithm gets
 
-	void Start () {
-		
-	}
+	public Text numText; // input field text for number of impact objects
+	public Text radText; // input field text for radius of impact objects
 
-	void Update()
+	public void calculateButtonPressed()
 	{
-		if (Input.GetMouseButtonDown(0))
+		//clear the field of impact objects
+		for (int i = 0; i < gameObject.transform.childCount; i++)
 		{
-			PlaceImpactObjects();
+			Destroy(gameObject.transform.GetChild(i).gameObject);
 		}
+
+		numOfImpacts = int.Parse(numText.text);
+		impactRadius = float.Parse(radText.text);
+		PlaceImpactObjects();
 	}
 
 	void PlaceImpactObjects()
