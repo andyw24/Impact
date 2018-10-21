@@ -251,7 +251,7 @@ public class Placement : MonoBehaviour {
 	{
 		float total = 0;
 		for (int j = 0; j < data.Length; j++) {
-			float max = 0;
+			float max = radius;
 			int currMax = -1;
 			for (int k = 0; k < wells.Length; k++) {
 				float distance = withinCircle(radius,data[j],wells[k]);
@@ -263,7 +263,7 @@ public class Placement : MonoBehaviour {
 			}
 			if(currMax!=-1)
 			{
-				total += data[currMax].z / Mathf.Pow(max, 2) * decay;
+				total += data[j].z / Mathf.Pow(max, 2) * decay;
 			}
 		}
 		return total;
