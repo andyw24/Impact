@@ -40,10 +40,6 @@ public class Placement : MonoBehaviour {
 
 
 		bestValue = bestImpact;
-		for (int i = 0; i < bestSet.Length; i++)
-		{
-			Debug.Log(bestSet[i] + " " + impactMap[(int)bestSet[i].x, (int)bestSet[i].y]);
-		}
 		return bestSet;
 	}
 

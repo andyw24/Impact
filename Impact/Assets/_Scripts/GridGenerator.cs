@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
+//using UnityEditor;
 using System.IO;
 using System;
 
@@ -25,22 +25,70 @@ public class GridGenerator : MonoBehaviour
 	public float max; // max or min population in a cell for color generation
 	public TextAsset gridInfo; // gridInfo.txt file
 	public GameObject gridImage; // image gameobject that holds the grid
+	public GameObject FilePath; // input field for file path
 
 	public GameObject impactObjects; // prefab impactObject
+	public GameObject impactCreator; // grid gameobject that holds the impact creator, this is needed for resetGrid()
 
 	private string fileName; // fileName of gridInfo.txt
 	public float[,] gridInfoArray; // gridArray that was read from file
 	Texture2D grid; // texture 2D that we are creating
 
+
 	void Awake()
 	{
-		fileName = "Assets/gridInfo.txt";
-		//MakeGridInfo(fileName);
+		fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+		fileName += "\\gridInfo.txt";
+		if (!File.Exists(fileName))
+		{
+			// Create a file to write to.
+			using (StreamWriter sw = File.CreateText(fileName))
+			{
+				Debug.Log("CREATE");
+				MakeGridInfo(fileName, sw);
+				sw.Close();
+			}
+		}
+
+		/* Open the file to read from.
+		using (StreamReader sr = File.OpenText(fileName))
+		{
+			Debug.Log("READ");
+			ReadGridInfo(fileName);
+		}*/
 		ReadGridInfo(fileName);
 		CreateGridFromGridInfo();
 		grid.filterMode = FilterMode.Point;
 		gridImage.GetComponent<Image>().preserveAspect = true;
 
+	}
+
+	// Reset Grid Button press
+	public void ResetGrid()
+	{
+		ReadGridInfo(fileName);
+		CreateGridFromGridInfo();
+		grid.filterMode = FilterMode.Point;
+		gridImage.GetComponent<Image>().preserveAspect = true;
+		impactCreator.GetComponent<ImpactCreator>().calculateButtonPressed();
+	}
+
+	public void MakeRandomGrid()
+	{
+		StreamWriter sw = new StreamWriter(fileName);
+		MakeGridInfo(fileName, sw);
+		sw.Close();
+		ReadGridInfo(fileName);
+		CreateGridFromGridInfo();
+		grid.filterMode = FilterMode.Point;
+		gridImage.GetComponent<Image>().preserveAspect = true;
+		impactCreator.GetComponent<ImpactCreator>().calculateButtonPressed();
+	}
+
+	public void ChangeFilePath()
+	{
+		fileName = FilePath.GetComponent<InputField>().text;
+		Debug.Log(fileName);
 	}
 
 	// Creates a Texture2D from the gridInfo.txt file
@@ -158,15 +206,18 @@ public class GridGenerator : MonoBehaviour
 			}
 
 		}
+		sr.Close();
 		gridInfoArray = gridArray;
 	}
 
 	// Makes a random gridInfo.txt file
-	public void MakeGridInfo(string fileName)
+	public void MakeGridInfo(string fileName, StreamWriter sw)
 	{
 		try
 		{
-			StreamWriter sw = new StreamWriter(fileName);
+			//generate random widths and heights
+			height = 50 - (int)UnityEngine.Random.Range(0f, 25f);
+			width = 50 - (int)UnityEngine.Random.Range(0f, 25f);
 
 			sw.WriteLine(width + " " + height + " 0"); //first line in file is width and height
 
@@ -174,7 +225,7 @@ public class GridGenerator : MonoBehaviour
 			{
 				for (int j = 0; j < width; j++)
 				{
-					sw.Write((int)(UnityEngine.Random.Range(0, 100f)));
+					sw.Write((int)(UnityEngine.Random.Range(-50f, 100f)));
 					sw.Write(" ");
 				}
 				sw.Write("\n");

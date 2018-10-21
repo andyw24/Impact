@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,7 @@ public class ImpactCreator : MonoBehaviour {
 
 		numOfImpacts = int.Parse(numText.text);
 		impactRadius = float.Parse(radText.text);
+
 		PlaceImpactObjects();
 	}
 
