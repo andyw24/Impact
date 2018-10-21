@@ -32,10 +32,9 @@ public class ImpactObject : MonoBehaviour {
 		{
 			cellSize = (float)(gridImage.GetComponent<RectTransform>().rect.height) / gridHeight;
 		}
-		offset = cellSize / 2;
 
-		Debug.Log(cellSize);
-		this.transform.localPosition = new Vector2((x * cellSize) + offset, (y * cellSize) + offset);
+		offset = cellSize / 2;
+		this.transform.localPosition = new Vector2((x * cellSize) + offset, ((gridHeight - y -1) * cellSize) + offset);
 
 		calculateRadius();
 		this.transform.localScale = new Vector3(radiusScale, radiusScale, 1f);
