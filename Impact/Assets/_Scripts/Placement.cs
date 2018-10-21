@@ -60,19 +60,19 @@ public class Placement : MonoBehaviour {
 
 					if (inMap(width, height, new Vector2(data[d].x + x, data[d].y + y)))
 					{
-						impactMap [(int)(data [d].x + x), (int)(data [d].y + y)] += data [d].z;// / Mathf.Pow(distance, 2) * decay;
+						impactMap [(int)(data [d].x + x), (int)(data [d].y + y)] += data [d].z / Mathf.Pow(distance + 1, 2) * decay;
 					}
 					if (x != 0 && inMap(width, height, new Vector2(data[d].x - x, data[d].y + y)))
 					{
-						impactMap [(int)(data [d].x - x), (int)(data [d].y + y)] += data [d].z;// / Mathf.Pow(distance, 2) * decay;
+						impactMap [(int)(data [d].x - x), (int)(data [d].y + y)] += data [d].z / Mathf.Pow(distance + 1, 2) * decay;
 					}
 					if (y != 0 && inMap(width, height, new Vector2(data[d].x + x, data[d].y - y)))
 					{
-						impactMap[(int)(data[d].x + x), (int)(data[d].y - y)] += data[d].z;// / Mathf.Pow(distance, 2) * decay;
+						impactMap[(int)(data[d].x + x), (int)(data[d].y - y)] += data[d].z / Mathf.Pow(distance + 1, 2) * decay;
 					}
 					if (x != 0 && y != 0 && inMap(width, height, new Vector2(data[d].x - x, data[d].y - y)))
 					{
-						impactMap[(int)(data[d].x - x), (int)(data[d].y - y)] += data[d].z;// / Mathf.Pow(distance, 2) * decay;
+						impactMap[(int)(data[d].x - x), (int)(data[d].y - y)] += data[d].z / Mathf.Pow(distance + 1, 2) * decay;
 					}
 					x++;
 					distance = withinCircle(radius, data[d], new Vector2(data[d].x + x, data[d].y + y));
@@ -276,8 +276,8 @@ public class Placement : MonoBehaviour {
 			}
 			if(currMax!=-1)
 			{
-				//total += data[j].z / Mathf.Pow(max, 2) * decay;
-				total+=data[j].z;
+				total += data[j].z / Mathf.Pow(max + 1, 2) * decay;
+				//total+=data[j].z;
 			}
 		}
 		return total;
